@@ -29,8 +29,8 @@ class FirstStep:
 
     @allure.step("Открыть первую страницу регистрации")
     def open_first_step_reg(self):
-        self.page.goto(self.first_step_url)
-        self.page.wait_for_load_state('load', timeout=50)
+        self.page.goto(self.first_step_url, wait_until='domcontentloaded')
+
 
 
     @allure.step('Нажать на кнопку "Продолжить"')
