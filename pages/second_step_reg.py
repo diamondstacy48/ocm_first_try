@@ -12,7 +12,7 @@ class SecondStep:
         self.pass_num_input = page.locator('#usermodel-passport_number')
         self.pass_code_input = page.locator('#usermodel-passport_issuer_code')
         self.pass_name_input = page.locator('#usermodel-passport_issuer_name')
-        self.pass_date_input =  page.locator('#usermodel-passport_date')
+        self.pass_date_input = page.locator('#usermodel-passport_date')
         self.pass_birthplace_input = page.locator('#usermodel-passport_birth_place')
         self.region_input = page.locator('#usermodel-region')
         self.city_input = page.locator('#usermodel-city')
@@ -83,11 +83,14 @@ class SecondStep:
         self.match_address_checkbox.click()
 
 
+
  #не работает, надо подумать
-    # def choose_dadata_first_var(self):
-    #     self.page.wait_for_selector('.suggestions-suggestions')
-    #     first_var_dadata = '.suggestions-suggestions:nth(0)'
-    #     self.page.click(first_var_dadata)
+    def choose_dadata_first_var(self):
+        self.page.wait_for_selector('.suggestions-suggestions')
+        first_var_dadata = '.suggestions-suggestions:nth(0)'
+        self.page.click(first_var_dadata)
+
+
 
 # Проверка отображения алертов обязательных полей на 2 шаге
     @allure.step("Проверить, что отображаются сообщения об ошибке")
@@ -100,39 +103,49 @@ class SecondStep:
         expect(self.error_empty_region).to_be_visible()
         expect(self.error_empty_leg_region).to_be_visible()
 
-    @allure.step("Получить текст ошибки Значение «Серия и номер паспорта» неверно")
-    def get_error_text_wrong(self):
-        return self.error_wrong_pass_num.text_content()
-
-    @allure.step("Получить текст ошибки Необходимо заполнить «Серия и номер паспорта».")
-    def get_error_text_empty(self):
-        return self.error_empty_pass_num.text_content()
 
 
-    # @allure.step("Проверить, что ошибка отображается")
-    # def error_is_hidden(self):
-    #     self.error_message = page.locator('.error-page-field')
-    #     self.error_message.wait_for(state="hidden")
-    #     return self
-
+    @allure.step("Заполнить поля на второй странице регистрации валидными данными")
+    def fill_all_fields(self):
+        self.pass_num_input.fill(f'630{fake_ru.msisdn()}')
+        self.pass_code_input.fill('630-000')
+        # self.choose_dadata_first_var()
+        # self.dadata_var.nth(0).click()
+        # self.pass_name_input.fill('ПРОМЫШЛЕННЫМ РУВД Г. САМАРЫ')
+        self.pass_date_input.fill('01.12.2025')
+        self.pass_birthplace_input.fill(fake_ru.city())
+        self.region_input.fill("Самарская обл")
+        self.page.wait_for_selector('.suggestions-suggestions')
+        self.dadata_var.nth(0).click()
+        self.city_input.fill('Самара')
+        self.dadata_var.nth(0).click()
+        self.street_input.fill('Волжский пр-кт')
+        self.dadata_var.nth(0).click()
+        self.house_num_input.fill('5')
+        self.dadata_var.nth(0).click()
+        self.flat_num_input.fill('55')
+        
+        
 
 
 # Заполнение полей второго шага регистрации
-    # def fill_personal_data_second_step(self):
-    #     self.pass_num_input.fill(f'630{fake_ru.msisdn()}')
-    #     self.pass_code_input.fill('630-000')
-    #     self.choose_dadata_first_var()
-    #     # self.dadata_var.nth(0).click()
-    #     # self.pass_name_input.fill('ПРОМЫШЛЕННЫМ РУВД Г. САМАРЫ')
-    #     self.pass_date_input.fill('01.12.2025')
-    #     self.pass_birthplace_input.fill(fake_ru.city())
-    #     self.region_input.fill("Самарская обл")
-    #     self.page.wait_for_selector('.suggestions-suggestions')
-    #     self.dadata_var.nth(0).click()
-    #     self.city_input.fill('Самара')
-    #     self.dadata_var.nth(0).click()
-    #     self.street_input.fill('Волжский пр-кт')
-    #     self.dadata_var.nth(0).click()
-    #     self.house_num_input.fill('5')
-    #     self.dadata_var.nth(0).click()
-    #     self.flat_num_input.fill('55')
+    def fill_personal_data_second_step(self):
+        # self.pass_num_input.fill(f'630{fake_ru.msisdn()}')
+        self.pass_num_input.fill(fake_ru.bothify(text='#### ######'))
+        self.pass_code_input.fill(fake_ru.bothify(text='##'))
+        self.page.wait_for_selector("#passport_issuer_name__suggestions", state='visible')
+        self.page.get_by_text("-0").first.click()
+        self.pass_date_input.fill('01.12.2025')
+        self.pass_birthplace_input.fill(fake_ru.city())
+        region_text=fake_ru.region()
+        self.region_input.fill(region_text)
+        self.page.wait_for_selector("#passport_issuer_name__suggestions", state='visible')
+        self.page.get_by_text(region_text[0]).first.click()
+        self.page.wait_for_selector('#usermodel-city', state='visible')
+        self.street_input.fill(fake_ru.lexify(text='?'))
+        self.page.wait_for_selector("#passport_issuer_name__suggestions", state='visible')
+        self.page.get_by_text("ул").first.click()
+        self.house_num_input.fill(fake_ru.bothify(text='#'))
+        self.page.wait_for_selector("#passport_issuer_name__suggestions", state='visible')
+        self.page.get_by_text("д").first.click()
+        self.flat_num_input.fill('55')

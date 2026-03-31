@@ -30,13 +30,13 @@ class FirstStep:
     @allure.step("Открыть первую страницу регистрации")
     def open_first_step_reg(self):
         self.page.goto(self.first_step_url)
-        time.sleep(10)
+        self.page.wait_for_load_state('load', timeout=50)
 
 
     @allure.step('Нажать на кнопку "Продолжить"')
     def click_next_step_button_first(self):
         self.next_step_button_first.click()
-        time.sleep(5)
+        self.page.wait_for_load_state('load')
 
 
     @allure.step("Заполнить поля 1-ого шага валидными данными")
@@ -58,6 +58,6 @@ class FirstStep:
         self.open_first_step_reg()
         self.fill_personal_data_first_step()
         self.click_next_step_button_first()
-        time.sleep(5)
+
 
 
