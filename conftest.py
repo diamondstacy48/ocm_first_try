@@ -18,3 +18,4 @@ def first_step_reg(page):
 @pytest.fixture()
 def second_step_reg(page):
     return SecondStep(page)
+
