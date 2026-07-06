@@ -69,8 +69,10 @@ class SecondStep:
             '.error-page-field:has-text("Необходимо заполнить «Кем выдан (как в паспорте)».")')
         self.error_wrong_leg_city = page.locator(
             '.error-page-field:has-text("Используйте только русские буквы и цифры")')
+        self.error_empty_leg_city = page.locator(
+            '.error-page-field:has-text("Необходимо заполнить «Город».")')
         self.error_empty_leg_street = page.locator(
-            '.error-page-field:has-text("Улица - обязательное поле (если отсутствует, укажите "нет").")')
+            ".error-page-field:has-text('Улица - обязательное поле (если отсутствует, укажите \"нет\").')")
         self.error_wrong_leg_street = page.locator(
             '.error-page-field:has-text("Используйте только русские буквы и цифры")')
         self.error_ddo_unchecked = page.locator(
@@ -119,6 +121,13 @@ class SecondStep:
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
 
+    @allure.step("Заполнить поле Регион в адресе проживания")
+    def fill_leg_region_field(self):
+        self.leg_region_input.fill("Самарская обл")
+        self.page.wait_for_selector('.suggestions-suggestion', state="visible")
+        self.page.click(".suggestions-suggestion[data-index='0']")
+
+
 
 # Заполнение полей второго шага регистрации
     @allure.step("Заполнить поля на второй странице регистрации валидными данными")
@@ -129,32 +138,31 @@ class SecondStep:
         self.page.wait_for_selector("#passport_issuer_name__suggestions", state='visible')
         self.page.get_by_text("-0").first.click()
         self.pass_date_input.fill('01.12.2025')
-        self.pass_birthplace_input.fill(fake_ru.city())
-        region_text=fake_ru.region()
-        self.region_input.fill(region_text)
+        self.pass_birthplace_input.fill("Самара")
+        self.region_input.fill("Самарская обл")
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.city_input.fill('г')
+        self.city_input.fill('Самара')
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.street_input.fill('ул')
+        self.street_input.fill('Волжский пр-кт')
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.house_num_input.fill('1')
+        self.house_num_input.fill('10')
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
         self.flat_num_input.fill('54')
         self.click_address_checkbox()
-        self.leg_region_input.fill(region_text)
+        self.leg_region_input.fill("Самарская обл")
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.leg_city_input.fill("г")
+        self.leg_city_input.fill("Самара")
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.leg_street_input.fill("ул")
+        self.leg_street_input.fill("Волжский пр-кт")
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
-        self.leg_house_num_input.fill("1")
+        self.leg_house_num_input.fill("5")
         self.page.wait_for_selector('.suggestions-suggestion', state="visible")
         self.page.click(".suggestions-suggestion[data-index='0']")
         self.leg_flat_num_input.fill('12')
